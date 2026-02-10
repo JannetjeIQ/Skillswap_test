@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { ListingCard } from "@/components/listings/listing-card";
 
-// Local category list only — do not import ListingCategory from @prisma/client (breaks Vercel build).
+// Categories defined here so build does not depend on @prisma/client (fixes Vercel).
 const CATEGORIES = [
   "CLEANING",
   "TUTORING",
