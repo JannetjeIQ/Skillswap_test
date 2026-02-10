@@ -1,0 +1,9 @@
+node_modules
+.next
+
+# Keep environment variables and local DB out of version control
+.env
+dev.db
+
+/app/generated/prisma
+npm-debug.log*

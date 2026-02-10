@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum ListingCategory {
+  CLEANING
+  TUTORING
+  PET_CARE
+  HANDYMAN
+  GARDENING
+  OTHER
+}
+
+model User {
+  id        String    @id @default(cuid())
+  name      String?
+  email     String?   @unique
+  image     String?
+  listings  Listing[]
+  createdAt DateTime  @default(now())
+}
+
+model Listing {
+  id          Int             @id @default(autoincrement())
+  title       String
+  description String
+  category    ListingCategory
+  // Store price in cents to avoid floating point surprises later.
+  priceCents  Int
+  email       String
+  createdAt   DateTime        @default(now())
+
+  userId String?
+  user   User? @relation(fields: [userId], references: [id])
+}
+
