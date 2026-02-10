@@ -1,13 +1,29 @@
 import Link from "next/link";
-import type { Listing, ListingCategory } from "@prisma/client";
 import { CategoryBadge } from "@/components/listings/category-badge";
 
+// Minimal type so we don't depend on @prisma/client generated types at build (Vercel).
+const CATEGORIES = [
+  "CLEANING",
+  "TUTORING",
+  "PET_CARE",
+  "HANDYMAN",
+  "GARDENING",
+  "OTHER",
+] as const;
+
+type ListingCategory = (typeof CATEGORIES)[number];
+
 type ListingCardProps = {
-  listing: Listing;
+  listing: {
+    id: number;
+    title: string;
+    description: string;
+    category: ListingCategory;
+    priceCents: number;
+  };
 };
 
 function formatPriceEUR(priceCents: number) {
-  // Store price in cents for precision, show in EUR for people.
   return new Intl.NumberFormat("en-IE", {
     style: "currency",
     currency: "EUR",

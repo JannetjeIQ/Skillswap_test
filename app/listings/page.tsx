@@ -1,6 +1,15 @@
 import { prisma } from "@/lib/prisma";
-import { ListingCategory } from "@prisma/client";
 import { ListingCard } from "@/components/listings/listing-card";
+
+// Use local category list so we don't depend on @prisma/client types at build (Vercel).
+const CATEGORIES = [
+  "CLEANING",
+  "TUTORING",
+  "PET_CARE",
+  "HANDYMAN",
+  "GARDENING",
+  "OTHER",
+] as const;
 
 type SearchParams = {
   category?: string;
@@ -10,20 +19,20 @@ type ListingsPageProps = {
   searchParams: SearchParams;
 };
 
-const CATEGORY_OPTIONS: { value: ListingCategory | "ALL"; label: string }[] = [
+const CATEGORY_OPTIONS: { value: (typeof CATEGORIES)[number] | "ALL"; label: string }[] = [
   { value: "ALL", label: "All categories" },
-  { value: ListingCategory.CLEANING, label: "Cleaning" },
-  { value: ListingCategory.TUTORING, label: "Tutoring" },
-  { value: ListingCategory.PET_CARE, label: "Pet Care" },
-  { value: ListingCategory.HANDYMAN, label: "Handyman" },
-  { value: ListingCategory.GARDENING, label: "Gardening" },
-  { value: ListingCategory.OTHER, label: "Other" },
+  { value: "CLEANING", label: "Cleaning" },
+  { value: "TUTORING", label: "Tutoring" },
+  { value: "PET_CARE", label: "Pet Care" },
+  { value: "HANDYMAN", label: "Handyman" },
+  { value: "GARDENING", label: "Gardening" },
+  { value: "OTHER", label: "Other" },
 ];
 
 export default async function ListingsPage({
   searchParams,
 }: ListingsPageProps) {
-  const selectedCategory = searchParams.category as ListingCategory | undefined;
+  const selectedCategory = searchParams.category as (typeof CATEGORIES)[number] | undefined;
 
   const listings = await prisma.listing.findMany({
     where: selectedCategory ? { category: selectedCategory } : undefined,
