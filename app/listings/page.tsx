@@ -29,6 +29,15 @@ const CATEGORY_OPTIONS: { value: (typeof CATEGORIES)[number] | "ALL"; label: str
   { value: "OTHER", label: "Other" },
 ];
 
+// Shape passed to ListingCard so map callback is explicitly typed (avoids implicit any in strict build).
+type ListingForCard = {
+  id: number;
+  title: string;
+  description: string;
+  category: (typeof CATEGORIES)[number];
+  priceCents: number;
+};
+
 export default async function ListingsPage({
   searchParams,
 }: ListingsPageProps) {
@@ -89,7 +98,7 @@ export default async function ListingsPage({
         </p>
       ) : (
         <section className="grid gap-4 md:grid-cols-2">
-          {listings.map((listing) => (
+          {listings.map((listing: ListingForCard) => (
             <ListingCard key={listing.id} listing={listing} />
           ))}
         </section>
